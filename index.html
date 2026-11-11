@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e8590c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="맛집기록">
+<title>맛집기록</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button id="btn-back" class="icon-btn hidden" aria-label="뒤로">‹</button>
+  <h1 id="title">맛집기록</h1>
+  <button id="btn-settings" class="icon-btn" aria-label="설정">⚙</button>
+</header>
+
+<main>
+  <!-- 목록 -->
+  <section id="view-list" class="view">
+    <div class="tabs"><button class="on" type="button">목록</button><button type="button" data-go="/cal">달력</button></div>
+    <input id="search" type="search" placeholder="가게 이름, 지역, 메모로 검색">
+    <div id="list"></div>
+    <p id="empty" class="empty hidden">아직 기록이 없어요.<br>아래 + 버튼으로 첫 기록을 남겨보세요.</p>
+  </section>
+
+  <!-- 달력 -->
+  <section id="view-calendar" class="view hidden">
+    <div class="tabs"><button type="button" data-go="/">목록</button><button class="on" type="button">달력</button></div>
+    <div class="cal-head">
+      <button id="cal-prev" class="icon-btn" type="button" aria-label="이전 달">‹</button>
+      <div>
+        <div class="cal-title">
+          <select id="cal-y" aria-label="연도"></select><span>.</span>
+          <select id="cal-m" aria-label="월">
+            <option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option>
+            <option value="4">5</option><option value="5">6</option><option value="6">7</option><option value="7">8</option>
+            <option value="8">9</option><option value="9">10</option><option value="10">11</option><option value="11">12</option>
+          </select><span>.</span>
+        </div>
+        <div id="cal-count" class="hint"></div>
+      </div>
+      <button id="cal-next" class="icon-btn" type="button" aria-label="다음 달">›</button>
+    </div>
+    <div class="cal-week"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+    <div id="cal-grid" class="cal-grid"></div>
+    <div id="cal-day"></div>
+  </section>
+
+  <!-- 새 기록: 사진 → 가게 찾기 -->
+  <section id="view-new" class="view hidden">
+    <div class="photo-buttons">
+      <label class="big-btn">📷 사진 찍기<input id="in-camera" type="file" accept="image/*" capture="environment" hidden></label>
+      <label class="big-btn">🖼 앨범에서 선택<input id="in-album" type="file" accept="image/*" multiple hidden></label>
+    </div>
+    <div id="new-thumbs" class="thumbs"></div>
+
+    <div id="find" class="hidden">
+      <p id="loc-status" class="hint"></p>
+      <div id="guess"></div>
+      <div id="others" class="hidden">
+        <button id="btn-here" class="btn full" type="button">📍 현재 위치로 주변 가게 찾기</button>
+        <div id="candidates"></div>
+        <form id="name-search" class="row">
+          <input id="in-name" type="search" placeholder="정확한 가게 이름 입력" autocomplete="off">
+          <button class="btn primary">검색</button>
+        </form>
+        <div id="name-results"></div>
+        <button id="btn-skip" class="link-btn" type="button">검색 없이 직접 입력하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 입력/수정 -->
+  <section id="view-edit" class="view hidden">
+    <form id="edit-form" autocomplete="off">
+      <div id="edit-thumbs" class="thumbs"></div>
+      <label class="add-photo">+ 사진 추가<input id="in-more" type="file" accept="image/*" multiple hidden></label>
+      <p id="edit-note" class="note hidden"></p>
+
+      <label>가게 이름<input name="name" required></label>
+      <label>주소<input name="address"></label>
+      <label>전화<input name="phone" type="tel"></label>
+      <label>분류<input name="category"></label>
+
+      <div class="lookup">
+        <p class="hint">영업시간·휴무·인스타는 아래 버튼으로 확인하고 붙여넣어 주세요.</p>
+        <div class="row wrap">
+          <a id="lk-naver" class="btn small" target="_blank" rel="noopener">네이버 지도</a>
+          <a id="lk-kakao" class="btn small" target="_blank" rel="noopener">카카오맵</a>
+          <a id="lk-insta" class="btn small" target="_blank" rel="noopener">인스타 찾기</a>
+        </div>
+      </div>
+
+      <label>영업시간<textarea name="hours" rows="3" placeholder="예) 매일 11:00~21:00 (브레이크 15:00~17:00)"></textarea></label>
+      <label>휴무<input name="closed" placeholder="예) 매주 월요일"></label>
+      <label>인스타그램<input name="instagram" placeholder="링크 또는 @아이디"></label>
+      <div class="two">
+        <label>방문일<input name="date" type="date"></label>
+        <label>방문 시간<input name="time" type="time"></label>
+      </div>
+      <div class="field">
+        <span>별점</span>
+        <div id="rating" class="rating"></div>
+      </div>
+      <label>메모<textarea name="memo" rows="3" placeholder="먹은 메뉴, 맛, 분위기..."></textarea></label>
+      <button class="btn primary full">저장</button>
+    </form>
+  </section>
+
+  <!-- 상세 -->
+  <section id="view-detail" class="view hidden"></section>
+
+  <!-- 설정 -->
+  <section id="view-settings" class="view hidden">
+    <h2>카카오 키</h2>
+    <p class="hint">가게 검색에 쓰여요. 카카오 개발자 사이트에서 받은 <b>JavaScript 키</b>를 붙여넣으세요.</p>
+    <form id="key-form" class="row">
+      <input id="in-key" placeholder="JavaScript 키" autocomplete="off" spellcheck="false">
+      <button class="btn primary">저장</button>
+    </form>
+    <p id="key-status" class="hint"></p>
+
+    <h2>백업</h2>
+    <p class="hint">기록은 이 폰의 브라우저에만 저장돼요. 가끔 백업 파일을 내려받아 두세요.</p>
+    <div class="row wrap">
+      <button id="btn-export" class="btn" type="button">백업 내려받기</button>
+      <label class="btn">백업 불러오기<input id="in-import" type="file" accept="application/json,.json" hidden></label>
+    </div>
+    <p id="storage-info" class="hint"></p>
+  </section>
+</main>
+
+<button id="fab" class="fab" aria-label="새 기록">+</button>
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

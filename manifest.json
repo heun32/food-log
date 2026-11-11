@@ -1,0 +1,15 @@
+{
+  "name": "맛집기록",
+  "short_name": "맛집기록",
+  "description": "내가 간 식당·카페 기록",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf7f4",
+  "theme_color": "#e8590c",
+  "lang": "ko",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
