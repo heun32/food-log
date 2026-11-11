@@ -1,6 +1,6 @@
 // 앱 화면 파일을 저장해 두어 빠르게 열리게 함 (가게 검색은 인터넷 필요)
-const CACHE = 'food-log-v4';
-const ASSETS = ['./', 'index.html', 'style.css', 'app.js', 'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png'];
+const CACHE = 'food-log-v5';
+const ASSETS = ['./', 'index.html', 'style.css', 'config.js', 'app.js', 'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

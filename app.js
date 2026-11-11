@@ -169,8 +169,10 @@ function revokeAll() { liveUrls.forEach(u => URL.revokeObjectURL(u)); liveUrls =
 
 /* ---------------- 카카오 장소 검색 ---------------- */
 let kakaoPromise = null;
+// 직접 넣은 키가 있으면 그것, 없으면 config.js의 기본 키
+const kakaoKey = () => localStorage.getItem('kakaoKey') || window.KAKAO_KEY || '';
 function loadKakao() {
-  const key = localStorage.getItem('kakaoKey');
+  const key = kakaoKey();
   if (!key) return Promise.reject(new Error('NOKEY'));
   if (kakaoPromise) return kakaoPromise;
   kakaoPromise = new Promise((res, rej) => {
@@ -754,7 +756,8 @@ function renderDetail(r, sameDay = 1) {
 async function renderSettings() {
   const key = localStorage.getItem('kakaoKey') || '';
   $('#in-key').value = key;
-  $('#key-status').textContent = key ? '키가 저장되어 있어요.' : '아직 키가 없어요.';
+  $('#key-status').textContent = key ? '직접 넣은 키를 쓰고 있어요.'
+    : window.KAKAO_KEY ? '기본 키를 쓰고 있어요. 따로 넣지 않아도 돼요.' : '아직 키가 없어요.';
   const all = await getAll();
   let info = `기록 ${all.length}개`;
   if (navigator.storage && navigator.storage.estimate) {
@@ -768,7 +771,7 @@ $('#key-form').onsubmit = async e => {
   const k = $('#in-key').value.trim();
   if (k) localStorage.setItem('kakaoKey', k); else localStorage.removeItem('kakaoKey');
   kakaoPromise = null;
-  if (!k) { $('#key-status').textContent = '키를 지웠어요.'; return; }
+  if (!k) { $('#key-status').textContent = window.KAKAO_KEY ? '직접 넣은 키를 지웠어요. 기본 키를 써요.' : '키를 지웠어요.'; return; }
   $('#key-status').innerHTML = '<span class="spinner"></span>연결 확인 중...';
   try {
     await searchKeyword('스타벅스');

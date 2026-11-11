@@ -119,7 +119,7 @@
   <!-- 설정 -->
   <section id="view-settings" class="view hidden">
     <h2>카카오 키</h2>
-    <p class="hint">가게 검색에 쓰여요. 카카오 개발자 사이트에서 받은 <b>JavaScript 키</b>를 붙여넣으세요.</p>
+    <p class="hint">가게 검색에 쓰여요. 기본 키가 들어 있으면 비워둬도 돼요. 다른 키를 쓰고 싶을 때만 <b>JavaScript 키</b>를 붙여넣으세요.</p>
     <form id="key-form" class="row">
       <input id="in-key" placeholder="JavaScript 키" autocomplete="off" spellcheck="false">
       <button class="btn primary">저장</button>
@@ -138,6 +138,7 @@
 
 <button id="fab" class="fab" aria-label="새 기록">+</button>
 <div id="toast" class="toast hidden"></div>
+<script src="config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
